@@ -1,14 +1,16 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Hello Vue 3 + Vite" />
+  <!-- v-bind: 親から渡す値を動的に変化させたい場合に用いる。記述は数式や値 -->
+  <TheHeader
+    :text="Math.floor(Math.random() * 10) % 2 === 0 ? 'even' : 'odd'"
+  />
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import TheHeader from "./components//TheHeader.vue";
 
 export default {
   components: {
-    HelloWorld,
+    TheHeader,
   },
 };
 
