@@ -3,8 +3,7 @@
   <TheHeader
     :text="Math.floor(Math.random() * 10) % 2 === 0 ? 'even' : 'odd'"
   />
-  <BaseButton />
-  <BaseButton />
+  <BaseButton @onClick="alertClick">+</BaseButton>
 </template>
 
 <script>
@@ -15,6 +14,11 @@ export default {
   components: {
     TheHeader,
     BaseButton,
+  },
+  methods: {
+    alertClick() {
+      alert("clicked!");
+    },
   },
 };
 
