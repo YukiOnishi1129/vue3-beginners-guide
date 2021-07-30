@@ -4,11 +4,11 @@
     :text="Math.floor(Math.random() * 10) % 2 === 0 ? 'even' : 'odd'"
   />
   <div>{{ count }}</div>
-  <BaseButton @onClick="plusOne">+</BaseButton>
-  <BaseButton @onClick="minusOne">-</BaseButton>
+  <BaseButton :disabled="hasMaxCount" @onClick="plusOne">+</BaseButton>
 
-  <!-- <input type="number" v-model="inputCount" /> -->
-  <NumberInput v-model.numberOnly="inputCount" />
+  <BaseButton :disabled="hasMinCount" @onClick="minusOne">-</BaseButton>
+
+  <NumberInput v-model.numberOnly="inputCount" max="9999" min="0" />
   <BaseButton @onClick="insertCount">insert</BaseButton>
 </template>
 
@@ -28,6 +28,27 @@ export default {
       count: 0,
       inputCount: 0,
     };
+  },
+  watch: {
+    inputCount(value) {
+      if (value >= 9999) {
+        this.inputCount = 9999;
+      }
+      // 入力値が0以下の場合、常にthis.inputCountを0で維持する
+      if (value <= 0) {
+        this.inputCount = 0;
+      }
+    },
+  },
+  computed: {
+    // 9999以上になったらtrueを返す
+    hasMaxCount() {
+      return this.count >= 9999;
+    },
+    // countが0以下になったら、trueを返す
+    hasMinCount() {
+      return this.count <= 0;
+    },
   },
   methods: {
     plusOne() {
