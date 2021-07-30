@@ -3,7 +3,10 @@
   <TheHeader
     :text="Math.floor(Math.random() * 10) % 2 === 0 ? 'even' : 'odd'"
   />
-  <div>{{ count }}</div>
+  <div v-if="!validationMessageList.length">{{ count }}</div>
+  <div v-else v-for="message in validationMessageList" :key="message">
+    {{ message }}
+  </div>
   <BaseButton :disabled="hasMaxCount" @onClick="plusOne">+</BaseButton>
 
   <BaseButton :disabled="hasMinCount" @onClick="minusOne">-</BaseButton>
@@ -27,17 +30,19 @@ export default {
     return {
       count: 0,
       inputCount: 0,
+      isEditing: false,
     };
   },
   watch: {
     inputCount(value) {
-      if (value >= 9999) {
-        this.inputCount = 9999;
-      }
-      // 入力値が0以下の場合、常にthis.inputCountを0で維持する
-      if (value <= 0) {
-        this.inputCount = 0;
-      }
+      // if (value >= 9999) {
+      //   this.inputCount = 9999;
+      // }
+      // // 入力値が0以下の場合、常にthis.inputCountを0で維持する
+      // if (value <= 0) {
+      //   this.inputCount = 0;
+      // }
+      this.isEditing = true;
     },
   },
   computed: {
@@ -49,6 +54,29 @@ export default {
     hasMinCount() {
       return this.count <= 0;
     },
+    hasMaxInputCount() {
+      return this.inputCount > 9999;
+    },
+    hasMinInputCount() {
+      return this.inputCount < 0;
+    },
+    validationMessageList() {
+      const validationList = [];
+
+      if (this.isEditing) {
+        validationList.push("編集中...");
+      }
+
+      if (this.hasMaxInputCount) {
+        validationList.push("9999以上は入力できません。");
+      }
+
+      if (this.hasMinInputCount) {
+        validationList.push("0以下は入力できません。");
+      }
+
+      return validationList;
+    },
   },
   methods: {
     plusOne() {
@@ -58,7 +86,9 @@ export default {
       this.count--;
     },
     insertCount() {
+      if (this.hasMaxInputCount || this.hasMinInputCount) return;
       this.count = this.inputCount;
+      this.isEditing = false;
     },
   },
 };
