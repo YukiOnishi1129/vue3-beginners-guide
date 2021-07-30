@@ -3,7 +3,12 @@
   <TheHeader
     :text="Math.floor(Math.random() * 10) % 2 === 0 ? 'even' : 'odd'"
   />
-  <BaseButton @onClick="alertClick">+</BaseButton>
+  <div>{{ count }}</div>
+  <BaseButton @onClick="plusOne">+</BaseButton>
+  <BaseButton @onClick="minusOne">-</BaseButton>
+
+  <input type="number" v-model="inputCount" />
+  <BaseButton @onClick="insertCount">insert</BaseButton>
 </template>
 
 <script>
@@ -15,9 +20,21 @@ export default {
     TheHeader,
     BaseButton,
   },
+  data() {
+    return {
+      count: 0,
+      inputCount: 0,
+    };
+  },
   methods: {
-    alertClick() {
-      alert("clicked!");
+    plusOne() {
+      this.count++;
+    },
+    minusOne() {
+      this.count--;
+    },
+    insertCount() {
+      this.count = this.inputCount;
     },
   },
 };
